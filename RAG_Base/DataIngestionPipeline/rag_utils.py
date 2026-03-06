@@ -1,7 +1,8 @@
-import re
+import re 
+import json 
+import os
 
 def parse_chat(file_path):
-
     with open(file_path,"r",encoding = 'utf-8') as f:
         lines = f.readlines()
 
@@ -56,7 +57,7 @@ def parse_chat(file_path):
                         'text':mss
                     }
             else:
-    
+
                 current_message = {
                     'timestamp':timestamp,
                     'speaker':speaker,
@@ -68,3 +69,54 @@ def parse_chat(file_path):
     merged_messages.append(current_message)
 
     return merged_messages
+
+def reply_context_chat(merged_messages,TARGET_SPEAKER):
+    # Context , reply 
+    context_reply = []
+
+    for i in range(1, len(merged_messages)):
+
+        previous = merged_messages[i-1]
+        current = merged_messages[i]
+
+        if (
+            current["speaker"] == TARGET_SPEAKER
+            and previous["speaker"] != TARGET_SPEAKER
+        ):
+            context = previous["text"]
+            reply = current["text"]
+
+            context_reply.append({'context':context,'reply':reply})
+
+    return context_reply
+
+def create_rag_memory(pairs):
+
+    rag_data = []
+
+    for p in pairs:
+        for pair in p:
+            context = pair["context"].strip()
+            reply = pair["reply"].strip()
+
+
+            if len(reply.split()) <2:
+                continue #removing low_quality replies
+
+
+            rag_data.append({
+                "page_content": f"Context: {context} | Reply: {reply}",
+                "metadata": {
+                    "original_context": context,
+                    "reply": reply
+                }
+            })
+
+    return rag_data
+    
+
+def save_rag_memory(rag_data,file_path):
+    with open(file_path,"w",encoding = "utf-8") as f:
+        json.dump(rag_data,f,indent= 2, ensure_ascii = False)
+
+    print("RAG memory units created:", len(rag_data))

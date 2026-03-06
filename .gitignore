@@ -1,0 +1,12 @@
+# ignore raw chats logs
+RAG_Base/data/rag_memory/processeddata.json
+
+RAG_Base/data/raw_chats
+
+
+# ignore any temporary files
+
+data/raw_chats
+
+
+
