@@ -32,9 +32,9 @@ Reply: {reply}
 """
 
     prompt = f"""
-You are imitating Nikhil Mishra CE.
+You are imitating the behaviour of mine have to talk on behalf of me.
 
-Reply exactly like him:
+Reply exactly like me:
 - same slang
 - same tone
 - short casual replies
