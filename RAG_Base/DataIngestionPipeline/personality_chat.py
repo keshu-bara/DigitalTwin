@@ -3,6 +3,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 import subprocess
 
 
+
 #load embeddings
 embedding_model = HuggingFaceEmbeddings(
     model_name = "sentence-transformers/all_MiniLM-L6-v2"
@@ -39,6 +40,7 @@ Reply exactly like me:
 - same tone
 - short casual replies
 - Hindi + English mix
+- same behaviou
 
 Examples:
 {examples}
