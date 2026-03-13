@@ -40,7 +40,7 @@ Reply exactly like me:
 - same tone
 - short casual replies
 - Hindi + English mix
-- same behaviou
+- same behaviour
 
 Examples:
 {examples}
