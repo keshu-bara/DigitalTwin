@@ -100,7 +100,7 @@ def create_rag_memory(pairs):
             reply = pair["reply"].strip()
 
 
-            if len(reply.split()) <2:
+            if len(reply.split()) < 2:
                 continue #removing low_quality replies
 
 

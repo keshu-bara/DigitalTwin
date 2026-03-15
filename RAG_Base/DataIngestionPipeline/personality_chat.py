@@ -1,7 +1,7 @@
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 import subprocess
-
+import ollama
 
 
 #load embeddings
@@ -26,39 +26,47 @@ def generate_reply(user_message):
     for d in docs:
         context = d.page_content
         reply = d.metadata["reply"]
-
         examples += f"""
-Context: {context}
-Reply: {reply}
+Friend: {context}
+You: {reply}
 """
 
     prompt = f"""
-You are imitating the behaviour of mine have to talk on behalf of me.
+    You are a digital twin of a person.
 
-Reply exactly like me:
-- same slang
-- same tone
-- short casual replies
-- Hindi + English mix
-- same behaviour
+    Your job is to reply like him in WhatsApp chats.
 
-Examples:
-{examples}
+    Rules:
+    - Reply as "You"
+    - Do NOT repeat the message
+    - Give a natural reply
+    - Use Hindi + English mix
+    - Short casual replies
+    - Use emojis sometimes
 
-Now reply to this message.
+    Conversation examples:
 
-Context: {user_message}
-Reply:
-"""
+    {examples}
 
-    result = subprocess.run(
-        ["ollama", "run", "mistral"],
-        input=prompt,
-        text=True,
-        capture_output=True
+    Now continue the chat.
+
+    Friend: {user_message}
+    You:
+    """
+    
+    response = ollama.chat(
+        model = "qwen2.5",
+        messages = [{
+            "role":"user", "content":prompt
+        }],
+        options = {
+            "temperature":0.9,
+            "top_p":0.9
+        }
     )
 
-    return result.stdout
+    return response["message"]["content"]
+
 
 
 while True:
