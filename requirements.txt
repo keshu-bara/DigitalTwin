@@ -1,0 +1,7 @@
+transformers 
+accelerate 
+bitsandbytes
+datasets
+chromadb
+langchain
+sentence-transformers
